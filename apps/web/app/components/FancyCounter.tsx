@@ -2,7 +2,7 @@
 
 import { createContext, useContext, ReactNode } from 'react'
 import clsx from 'clsx'
-import { useFancyCounter as useFancyCounterHook } from '../hooks/useFancyCounter'
+import { useFancyCounter  } from '../hooks/useFancyCounter'
 
 interface FancyCounterContextType {
   count: number
@@ -11,21 +11,8 @@ interface FancyCounterContextType {
   fancyClass: string
 }
 
+// 创建Context 通过 Context.Provider 向下派发数据
 const FancyCounterContext = createContext<FancyCounterContextType | null>(null)
-
-interface FancyCounterProps {
-  children: ReactNode
-}
-
-const FancyCounter = ({ children }: FancyCounterProps) => {
-  const { count, increment, decrement, fancyClass } = useFancyCounterHook()
-  
-  return (
-    <FancyCounterContext.Provider value={{ count, increment, decrement, fancyClass }}>
-      {children}
-    </FancyCounterContext.Provider>
-  )
-}
 
 const useFancyCounterContext = () => {
   const context = useContext(FancyCounterContext)
@@ -34,6 +21,21 @@ const useFancyCounterContext = () => {
   }
   return context
 }
+
+interface FancyCounterProps {
+  children: ReactNode
+}
+
+const FancyCounter = ({ children }: FancyCounterProps) => {
+  const { count, increment, decrement, fancyClass } = useFancyCounter()
+  
+  return (
+    <FancyCounterContext.Provider value={{ count, increment, decrement, fancyClass }}>
+      {children}
+    </FancyCounterContext.Provider>
+  )
+}
+
 
 const Count = () => {
   const { count, fancyClass} = useFancyCounterContext()
@@ -92,14 +94,10 @@ const DecrementBtn = ({ children, by = 1 }: DecrementBtnProps) => {
   )
 }
 
-interface FireworksProps {
-  at: number
-}
-
-const Fireworks = ({ at }: FireworksProps) => {
+const Fireworks = (props: { at: number }) => {
   const { count } = useFancyCounterContext()
   
-  if (count === at) {
+  if (count === props?.at) {
     return <span>🎆 Fireworks!</span>
   }
   

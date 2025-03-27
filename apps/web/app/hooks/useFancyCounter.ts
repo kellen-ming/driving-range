@@ -1,6 +1,5 @@
 import { useMemo, useReducer } from "react";
 
-// It's prefixed by `use` now, its a hook!
 export function useFancyCounter() {
   const [count, dispatch] = useReducer((state, action) => {
     switch (action.type) {
@@ -16,7 +15,7 @@ export function useFancyCounter() {
   const increment = () => dispatch({ type: 'increment' });
   const decrement = () => dispatch({ type: 'decrement' });
 
-  // Add fancy styles every time `count` doubles
+  // 每次计算添加一些样式
   const fancyClass = useMemo(() => {
 
     switch (count) {
@@ -27,7 +26,6 @@ export function useFancyCounter() {
       case 3:
         return "text-blue-400";
       default:
-        // Beyond 255
         return "";
     }
   }, [count]);

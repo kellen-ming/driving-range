@@ -7,6 +7,12 @@ const projects = [
     path: "/page-list/headless-demo",
     tags: ["Next.js", "Headless CMS"]
   },
+  {
+    title: "Gradient Color",
+    description: "不一样的渐变色",
+    path: "/page-list/gradient-color",
+    tags: ["UI"]
+  },
   // ... 这里可以添加更多项目
 ];
 

@@ -67,12 +67,15 @@ export default function GradientColor() {
       colors: ['#FEE9CB', '#14485E', '#C2FCC4']
     }
   ]
+
+  
+
   return (
     // <div className="min-h-screen  p-8 flex flex-wrap gap-6 items-start justify-center">
     <div className="min-h-screen bg-gradient-to-b from-[#EF6837] to-[#114468] p-8 flex flex-wrap gap-6 items-start justify-center">
       <Card>
         <h3 className="text-white font-medium text-lg mb-3">自然色调</h3>
-        <div className='h-40 w-full rounded-lg overflow-hidden flex'>
+        {/* <div className='h-40 w-full rounded-lg overflow-hidden flex'> */}
           {/* {gradientColor[0].colors.map((color, index) => (
             <div 
               key={index} 
@@ -84,6 +87,21 @@ export default function GradientColor() {
               </span>
             </div>
           ))} */}
+        {/* </div> */}
+        <div 
+          className="
+            flex p-3 
+            text-white 
+            justify-between 
+            rounded-2xl 
+            bg-gradient-to-r 
+            from-[#EF6837] 
+            to-[#114468]  
+            shadow-xl
+            "
+          >
+          <span>#FEE9CB</span>
+          <span>#14485E</span>
         </div>
       </Card>
       

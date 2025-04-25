@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PageWrapper } from "../components/ui/page-wrapper";
 
 const projects = [
   {
@@ -18,15 +19,7 @@ const projects = [
 
 export default function PageList() {
   return (
-    <div className="min-h-screen relative bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      {/* 装饰性背景元素 */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-32 w-96 h-96 rounded-full bg-purple-100/50 blur-3xl" />
-        <div className="absolute top-1/3 -left-32 w-96 h-96 rounded-full bg-indigo-100/50 blur-3xl" />
-        <div className="absolute -bottom-40 right-1/3 w-96 h-96 rounded-full bg-pink-100/50 blur-3xl" />
-      </div>
-
-      {/* 主要内容 */}
+    <PageWrapper>
       <div className="relative py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-5xl font-bold text-gray-900 mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
@@ -67,6 +60,6 @@ export default function PageList() {
           </div>
         </div>
       </div>
-    </div>
+    </PageWrapper>
   );
 }

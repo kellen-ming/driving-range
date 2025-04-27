@@ -1,46 +1,51 @@
-import clsx from "clsx";
+"use client"
+
+import React, { useState } from "react";
 
 export interface ColoBackgrounDBoardProps {
-  params: Record<string, string>
+  params: Promise<Record<string, string>>
 }
 
 export default function ColoBackgrounDBoard(props: ColoBackgrounDBoardProps) {
-  const { params } = props;
+  const [ direction, setDirection ] = useState<'row' | 'column'>('row')
+  // 用 React.use() 解包 Promise
+  const params = React.use(props.params);
   const { colors } = params;
-  if(!colors) return 
 
-  const formatColors = JSON.parse(colors) as string[]
-  let gradientClasses = '';
-  if(formatColors.length > 2) {
-    gradientClasses = `from-[${formatColors[0]}] via-[${formatColors[1]}] to-[${formatColors[2]}]`
-  } else {
-    gradientClasses = `from-[${formatColors[0]}] to-[${formatColors[1]}]`
-  }
+  if(!colors) return;
+  const formatColors = decodeURIComponent(colors).split(',')
+  console.log({formatColors});
   
-  const bgBaseClasses = `
-    min-h-screen
-    bg-gradient-to-b
-    justify-center
-    items-center
-  `
+  const backgroundDirection =  direction === 'column' ? 'bottom' : 'right'
+  const background = formatColors.length > 2 
+    ? `linear-gradient(to ${backgroundDirection}, ${formatColors[0]}, ${formatColors[1]}, ${formatColors[2]})` 
+    : `linear-gradient(to ${backgroundDirection}, ${formatColors[0]}, ${formatColors[1]})`;
 
-  const baseClasses = `
-          flex p-3 
-          text-white 
-          justify-between 
-          rounded-2xl 
-          bg-gradient-to-r 
-          from-[#EF6837] 
-          to-[#114468]  
-          shadow-xl
-        `
+  const layOutStyle: React.CSSProperties = {
+    background,
+  };
+
+  const innerStyle: React.CSSProperties = {
+    background,
+    flexDirection: direction,
+    width: direction === 'row' ? '24rem' : 'fit-content',
+    height: direction === 'column' ? '24rem' : 'fit-content',
+    transition: 'all 0.4s ',
+  };
+
   return (
-    <div className={clsx(bgBaseClasses, gradientClasses)}>
+    <div 
+      style={layOutStyle}
+      className='min-h-screen flex justify-center items-center'
+    >
       <div
-        className={clsx(baseClasses, gradientClasses)}>
+        style={innerStyle}
+        className='flex p-3 text-white justify-between rounded-2xl shadow-xl cursor-pointer'
+        onClick={() => setDirection(pre => pre === 'row' ? 'column' : 'row')}
+      >
         {
           formatColors?.map((color, index) => (
-            <span key={index}>{color}</span>
+            <span key={index} className="">{color}</span>
           ))
         }
       </div>

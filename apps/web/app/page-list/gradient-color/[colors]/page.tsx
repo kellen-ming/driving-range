@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link";
 import React, { useState } from "react";
 
 export interface ColoBackgrounDBoardProps {
@@ -8,13 +9,13 @@ export interface ColoBackgrounDBoardProps {
 
 export default function ColoBackgrounDBoard(props: ColoBackgrounDBoardProps) {
   const [ direction, setDirection ] = useState<'row' | 'column'>('row')
+  
   // 用 React.use() 解包 Promise
   const params = React.use(props.params);
   const { colors } = params;
 
   if(!colors) return;
   const formatColors = decodeURIComponent(colors).split(',')
-  console.log({formatColors});
   
   const backgroundDirection =  direction === 'column' ? 'bottom' : 'right'
   const background = formatColors.length > 2 
@@ -32,15 +33,20 @@ export default function ColoBackgrounDBoard(props: ColoBackgrounDBoardProps) {
     height: direction === 'column' ? '24rem' : 'fit-content',
     transition: 'all 0.4s ',
   };
+  
 
   return (
     <div 
       style={layOutStyle}
-      className='min-h-screen flex justify-center items-center'
+      className='relative min-h-screen flex justify-center items-center flex-col'
     >
+      <Link 
+        href={'/page-list/gradient-color'}
+        className="mb-4 text-xl"
+      >👈</Link>
       <div
         style={innerStyle}
-        className='flex p-3 text-white justify-between rounded-2xl shadow-xl cursor-pointer'
+        className='relative flex p-3 text-white justify-between rounded-2xl shadow-xl cursor-pointer'
         onClick={() => setDirection(pre => pre === 'row' ? 'column' : 'row')}
       >
         {

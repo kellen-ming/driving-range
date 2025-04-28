@@ -93,9 +93,70 @@ export default function GradientColor() {
       colorDesc: ['拿波里黄', '蒂芙尼蓝', '芥末棕'],
       colors: ['#FADA54', '#81CAC3', '#9D6C4A'],
     },
+    {
+      colors: ['#fef7c0', '#ffe2a8', '#f2ae86'],
+    },
+
+    {
+      colors: ['#dbbfdb', '#bbb5d8', '#877bae'],
+    },
+    {
+      colors: ['#eaef9d', '#c1d95c', '#80b155'],
+    },
+    {
+      colors: ['#93eee4', '#52e2d9', '#4ebdc2'],
+    },
+    {
+      colors: ['#ebe4f2', '#bec9e7', '#6373b7'],
+    },
+    {
+      colors: ['#eab595', '#d87f81', '#ae6378'],
+    },
+    {
+      colors: ['#c89494', '#a66a66', '#8c323d'],
+    },
+    {
+      colorDesc: ['枯红', '杏黄', '森绿'],
+      colors: ['#a10a19', '#e3a156', '#2e6535'],
+    },
+    {
+      colorDesc: ['品红', '海天霞', '软翠'],
+      colors: ['#ef0056', '#fae1d9', '#006a80'],
+    },
+    {
+      colorDesc: ['罗斯科红', '蛋壳黄', '紫檀'],
+      colors: ['#ae322a', '#f7c387', '#4c221b'],
+    },
+    {
+      colorDesc: ['琥珀', '优雅金', '鹤灰'],
+      colors: ['#c96924', '#dob08a', '#4a4035'],
+    },
+    {
+      colorDesc: ['洛神珠', '米色', '靛蓝'],
+      colors: ['#c5381d', '#f6e4c8', '#065279'],
+    },
+    {
+      colorDesc: ['复古青', '时尚黄', '石褐绿'],
+      colors: ['#65a091', '#e1cc93', '#453b18'],
+    },
+    {
+      colorDesc: ['深灰绿', '奢金', '胭脂虫'],
+      colors: ['#195a56', '#fed3a8', '#9d1e31'],
+    },
+    {
+      colorDesc: ['普鲁士蓝', '奢金', '圣罗兰红'],
+      colors: ['#003153', '#e3c79f', '#b5120f'],
+    },
+    {
+      colorDesc: ['珍珠橙', '阳光黄', '石绿'],
+      colors: ['#ea624d', '#f1daa4', '#167c66'],
+    },
+    {
+      colorDesc: ['薄荷绿', '卵色', '暗宝石'],
+      colors: ['#1a6840', '#d5e3d2', '#053154'],
+    },
   ]
 
-  
   const double = gradientColor.filter(i => i.colors.length === 2);
   const triple = gradientColor.filter(i => i.colors.length === 3);
 
@@ -110,14 +171,14 @@ export default function GradientColor() {
               <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
                 双色
               </h3>
-              <div className="flex flex-wrap gap-6 py-12  justify-center">
+              <div className="flex flex-wrap gap-6 py-8 justify-center">
                 {
                   double?.map((item, index) => {
                     const { colors, colorDesc } = item;
                     const colorDescLen = colorDesc?.length
-                    const background = `linear-gradient(to right, ${colors[0]}, ${colors[1]})`;
+                    const background = `linear-gradient(to right, ${colors[0]} 0%, ${colors[0]} 50%, ${colors[1]} 50%, ${colors[1]} 100%)`;
                     return (
-                      <Card key={index} path={`/page-list/gradient-color/${encodeURIComponent(colors.join(','))}`}>
+                      <Card key={index} path={`/pages/gradient-color/${encodeURIComponent(colors.join(','))}`}>
                         {
                           colorDescLen && colorDescLen > 0 ? (
                             <p className="mb-2 px-4 text-gray-600 font-medium flex justify-between w-72">
@@ -137,7 +198,7 @@ export default function GradientColor() {
                         >
                           {
                             colors.map((color, i) => (
-                              <span key={i}>{color}</span>
+                              <span key={i} className="text-[#5e5e5e] font-medium">{color}</span>
                             ))
                           }
                         </div>
@@ -151,14 +212,14 @@ export default function GradientColor() {
               <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
                 三重色
               </h3>
-              <div className="flex flex-wrap gap-6 py-12  justify-center">
+              <div className="flex flex-wrap gap-6 py-8 justify-center">
                 {
                   triple?.map((item, index) => {
                     const { colors, colorDesc } = item;
                     const colorDescLen = colorDesc?.length
-                    const background = `linear-gradient(to right, ${colors[0]}, ${colors[1]}, ${colors[2]})`;
+                    const background = `linear-gradient(to right, ${colors[0]} 0%, ${colors[0]} 33.33%, ${colors[1]} 33.33%, ${colors[1]} 66.66%, ${colors[2]} 66.66%, ${colors[2]} 100%)`;
                     return (
-                      <Card key={index} path={`/page-list/gradient-color/${encodeURIComponent(colors.join(','))}`}>
+                      <Card key={index} path={`/pages/gradient-color/${encodeURIComponent(colors.join(','))}`}>
                         {
                           colorDescLen && colorDescLen > 0 ? (
                             <p className="mb-2 px-4 text-gray-600 font-medium flex justify-between w-72">
@@ -178,7 +239,7 @@ export default function GradientColor() {
                         >
                           {
                             colors.map((color, i) => (
-                              <span key={i}>{color}</span>
+                              <span key={i} className="text-[#5e5e5e] font-medium">{color}</span>
                             ))
                           }
                         </div>
@@ -189,43 +250,6 @@ export default function GradientColor() {
               </div>
             </section>
           </div>
-          {/* <div className="py-16 px-4 flex flex-wrap gap-6">
-            {gradientColor.map((item, index) => {
-              const { colors, colorDesc } = item
-              const colorsLen = colors.length
-              const colorDescLen = colorDesc?.length
-              
-              const background = colorsLen > 2 ? `linear-gradient(to right, ${colors[0]}, ${colors[1]}, ${colors[2]})` : `linear-gradient(to right, ${colors[0]}, ${colors[1]})`
-              return (
-                <Card key={index} path={`/page-list/gradient-color/${encodeURIComponent(colors.join(','))}`}>
-                  {
-                    colorDescLen && colorDescLen > 0 ? (
-                      <p className="mb-2 px-4 text-gray-600 font-medium flex justify-between w-72">
-                        {
-                          colorDesc.map((desc, descIndex) => (
-                            <span key={descIndex}>{desc}</span>
-                          ))
-                        }
-                      </p>
-                    ) : null
-                  }
-                
-                  <div
-                    style={{
-                      background
-                    }} 
-                    className={clsx("flex p-3 text-white justify-between rounded-2xl shadow-xl w-72")}
-                  >
-                    {
-                      colors.map((color, i) => (
-                        <span key={i}>{color}</span>
-                      ))
-                    }
-                  </div>
-                </Card>
-              )  
-            })}
-          </div> */}
         </div>
     </PageWrapper> 
   )

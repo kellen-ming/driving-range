@@ -18,3 +18,46 @@ model User {
   name  String
   phone String 
 }
+
+// 颜色表
+model Color {
+  id          Int      @id @default(autoincrement())
+  hexCode     String   @unique  // 颜色值，如 "#EF6837"
+  name        String?  // 颜色名称，如 "梧枝绿"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // 关联到颜色组合
+  combinations ColorCombinationColor[]
+
+  @@index([hexCode])
+}
+
+// 颜色组合表
+model ColorCombination {
+  id          Int      @id @default(autoincrement())  // 颜色ID
+  name        String?  // 组合名称（可选）
+  type        String   // "double" 或 "triple"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // 关联到颜色
+  colors      ColorCombinationColor[]
+
+  @@index([type])
+}
+
+
+// 颜色和组合的关联表
+model ColorCombinationColor {
+  id                Int      @id @default(autoincrement())  // 组合ID
+  colorId           Int      // 颜色ID
+  colorCombinationId Int     // 组合ID
+  order             Int      // 颜色在组合中的顺序
+
+  // 关联
+  color             Color    @relation(fields: [colorId], references: [id])
+  combination       ColorCombination @relation(fields: [colorCombinationId], references: [id])
+
+  @@unique([colorId, colorCombinationId, order])
+}

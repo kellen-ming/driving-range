@@ -1,14 +1,46 @@
+'use client'
 import clsx from "clsx";
+import { useState } from "react";
 import { PageWrapper } from "../../components/ui/page-wrapper";
-import { Card } from "../../components/ui/card"; 
+import { Card } from "../../components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
 
 export interface GradientColor {
   colorDesc?:string[];
   colors: string[];
 }
 
+const formSchema = z.object({
+  colorValue: z.string().min(1, "请输入颜色值").regex(/^#[0-9A-Fa-f]{6}$/, "请输入有效的十六进制颜色值"),
+});
+
 export default function GradientColor() {
-  const gradientColor: GradientColor[] = [
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [gradientColor, setGradientColor] = useState<GradientColor[]>([
     {
       colorDesc: [],
       colors: ['#EF6837', '#114468']
@@ -96,7 +128,6 @@ export default function GradientColor() {
     {
       colors: ['#fef7c0', '#ffe2a8', '#f2ae86'],
     },
-
     {
       colors: ['#dbbfdb', '#bbb5d8', '#877bae'],
     },
@@ -155,102 +186,209 @@ export default function GradientColor() {
       colorDesc: ['薄荷绿', '卵色', '暗宝石'],
       colors: ['#1a6840', '#d5e3d2', '#053154'],
     },
-  ]
+  ]);
+
+  const [open, setOpen] = useState(false);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      colorName: "",
+      colorValue: "",
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    try {
+      const { data: newColor } = await axios.post('/api/colors', {
+        colorName: values.colorName,
+        colorValue: values.colorValue,
+      });
+      
+      // 更新本地状态
+      const newGradientColor = {
+        colorDesc: [values.colorName],
+        colors: [values.colorValue],
+      };
+      
+      setGradientColor([...gradientColor, newGradientColor]);
+      setOpen(false);
+      form.reset();
+
+      toast({
+        title: "添加成功",
+        description: `颜色 ${values.colorName} 已添加`,
+        className: "bg-green-500 text-white",
+      });
+    } catch (error: unknown) {
+      const errorMessage = axios.isAxiosError(error) 
+        ? error.response?.data?.error || error.message 
+        : "添加颜色失败";
+      
+      toast({
+        title: "添加失败",
+        description: errorMessage,
+        className: "bg-red-500 text-white",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   const double = gradientColor.filter(i => i.colors.length === 2);
   const triple = gradientColor.filter(i => i.colors.length === 3);
 
   return (
     <PageWrapper>
-        <div className="py-16 h-full">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
-            听说这些是比较好看的配色
-          </h1>
-          <div className="flex">
-            <section className="h-full w-1/2  border-r-2 ">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
-                双色
-              </h3>
-              <div className="flex flex-wrap gap-6 py-8 justify-center">
-                {
-                  double?.map((item, index) => {
-                    const { colors, colorDesc } = item;
-                    const colorDescLen = colorDesc?.length
-                    const background = `linear-gradient(to right, ${colors[0]} 0%, ${colors[0]} 50%, ${colors[1]} 50%, ${colors[1]} 100%)`;
-                    return (
-                      <Card key={index} path={`/pages/gradient-color/${encodeURIComponent(colors.join(','))}`}>
-                        {
-                          colorDescLen && colorDescLen > 0 ? (
-                            <p className="mb-2 px-4 text-gray-600 font-medium flex justify-between w-72">
-                              {
-                                colorDesc.map((desc, descIndex) => (
-                                  <span key={descIndex}>{desc}</span>
-                                ))
-                              }
-                            </p>
-                          ) : null
-                        }
-                        <div
-                          style={{
-                            background
-                          }} 
-                          className={clsx("flex p-3 text-white justify-between rounded-2xl shadow-xl w-72")}
-                        >
-                          {
-                            colors.map((color, i) => (
-                              <span key={i} className="text-[#5e5e5e] font-medium">{color}</span>
-                            ))
-                          }
-                        </div>
-                      </Card>
-                    )  
-                  })
-                }
-              </div>
-            </section>
-            <section className="h-full w-1/2">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
-                三重色
-              </h3>
-              <div className="flex flex-wrap gap-6 py-8 justify-center">
-                {
-                  triple?.map((item, index) => {
-                    const { colors, colorDesc } = item;
-                    const colorDescLen = colorDesc?.length
-                    const background = `linear-gradient(to right, ${colors[0]} 0%, ${colors[0]} 33.33%, ${colors[1]} 33.33%, ${colors[1]} 66.66%, ${colors[2]} 66.66%, ${colors[2]} 100%)`;
-                    return (
-                      <Card key={index} path={`/pages/gradient-color/${encodeURIComponent(colors.join(','))}`}>
-                        {
-                          colorDescLen && colorDescLen > 0 ? (
-                            <p className="mb-2 px-4 text-gray-600 font-medium flex justify-between w-72">
-                              {
-                                colorDesc.map((desc, descIndex) => (
-                                  <span key={descIndex}>{desc}</span>
-                                ))
-                              }
-                            </p>
-                          ) : null
-                        }
-                        <div
-                          style={{
-                            background
-                          }} 
-                          className={clsx("flex p-3 text-white justify-between rounded-2xl shadow-xl w-72")}
-                        >
-                          {
-                            colors.map((color, i) => (
-                              <span key={i} className="text-[#5e5e5e] font-medium">{color}</span>
-                            ))
-                          }
-                        </div>
-                      </Card>
-                    )  
-                  })
-                }
-              </div>
-            </section>
-          </div>
+      <div className="relative py-16 h-full">
+        {/* 右上角新建按钮 */}
+        <div className="absolute right-8 top-8 z-10">
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline">新建颜色</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>新建颜色</DialogTitle>
+              </DialogHeader>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="colorName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>颜色名称</FormLabel>
+                        <FormControl>
+                          <Input placeholder="请输入颜色名称" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="colorValue"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>颜色值</FormLabel>
+                        <FormControl>
+                          <div className="flex gap-2">
+                            <Input placeholder="#FF0000" {...field} />
+                            <input
+                              type="color"
+                              value={field.value}
+                              onChange={(e) => field.onChange(e.target.value)}
+                              className="h-10 w-10 rounded-md border p-1"
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button variant="outline">取消</Button>
+                    </DialogClose>
+                    <Button type="submit" disabled={isLoading}>
+                      {isLoading ? "添加中..." : "确定"}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
         </div>
-    </PageWrapper> 
+
+        <h1 className="text-5xl font-bold text-gray-900 mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+          听说这些是比较好看的配色
+        </h1>
+        <div className="flex">
+          <section className="h-full w-1/2  border-r-2 ">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+              双色
+            </h3>
+            <div className="flex flex-wrap gap-6 py-8 justify-center">
+              {
+                double?.map((item, index) => {
+                  const { colors, colorDesc } = item;
+                  const colorDescLen = colorDesc?.length
+                  const background = `linear-gradient(to right, ${colors[0]} 0%, ${colors[0]} 50%, ${colors[1]} 50%, ${colors[1]} 100%)`;
+                  return (
+                    <Card key={index} path={`/pages/gradient-color/${encodeURIComponent(colors.join(','))}`}>
+                      {
+                        colorDescLen && colorDescLen > 0 ? (
+                          <p className="mb-2 px-4 text-gray-600 font-medium flex justify-between w-72">
+                            {
+                              colorDesc.map((desc, descIndex) => (
+                                <span key={descIndex}>{desc}</span>
+                              ))
+                            }
+                          </p>
+                        ) : null
+                      }
+                      <div
+                        style={{
+                          background
+                        }} 
+                        className={clsx("flex p-3 text-white justify-between rounded-2xl shadow-xl w-72")}
+                      >
+                        {
+                          colors.map((color, i) => (
+                            <span key={i} className="text-[#5e5e5e] font-medium">{color}</span>
+                          ))
+                        }
+                      </div>
+                    </Card>
+                  )  
+                })
+              }
+            </div>
+          </section>
+          <section className="h-full w-1/2">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+              三重色
+            </h3>
+            <div className="flex flex-wrap gap-6 py-8 justify-center">
+              {
+                triple?.map((item, index) => {
+                  const { colors, colorDesc } = item;
+                  const colorDescLen = colorDesc?.length
+                  const background = `linear-gradient(to right, ${colors[0]} 0%, ${colors[0]} 33.33%, ${colors[1]} 33.33%, ${colors[1]} 66.66%, ${colors[2]} 66.66%, ${colors[2]} 100%)`;
+                  return (
+                    <Card key={index} path={`/pages/gradient-color/${encodeURIComponent(colors.join(','))}`}>
+                      {
+                        colorDescLen && colorDescLen > 0 ? (
+                          <p className="mb-2 px-4 text-gray-600 font-medium flex justify-between w-72">
+                            {
+                              colorDesc.map((desc, descIndex) => (
+                                <span key={descIndex}>{desc}</span>
+                              ))
+                            }
+                          </p>
+                        ) : null
+                      }
+                      <div
+                        style={{
+                          background
+                        }} 
+                        className={clsx("flex p-3 text-white justify-between rounded-2xl shadow-xl w-72")}
+                      >
+                        {
+                          colors.map((color, i) => (
+                            <span key={i} className="text-[#5e5e5e] font-medium">{color}</span>
+                          ))
+                        }
+                      </div>
+                    </Card>
+                  )  
+                })
+              }
+            </div>
+          </section>
+        </div>
+      </div>
+    </PageWrapper>
   )
 }

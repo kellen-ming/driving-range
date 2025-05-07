@@ -39,7 +39,7 @@ export default function GradientColor() {
   const [isLoading, setIsLoading] = useState(false);
   const [gradientColor, setGradientColor] = useState<GradientColor[]>([
     {
-      colorDesc: [],
+      colorDesc: ['橙红','深蓝'],
       colors: ["#EF6837", "#114468"],
     },
     {
@@ -154,10 +154,6 @@ export default function GradientColor() {
     {
       colorDesc: ["罗斯科红", "蛋壳黄", "紫檀"],
       colors: ["#ae322a", "#f7c387", "#4c221b"],
-    },
-    {
-      colorDesc: ["琥珀", "优雅金", "鹤灰"],
-      colors: ["#c96924", "#dob08a", "#4a4035"],
     },
     {
       colorDesc: ["洛神珠", "米色", "靛蓝"],
@@ -311,19 +307,27 @@ export default function GradientColor() {
                 return (
                   <Card key={index} path={`/pages/gradient-color/${encodeURIComponent(colors.join(","))}`}>
                     {colorDescLen && colorDescLen > 0 ? (
-                      <p className='mb-2 px-4 text-gray-600 font-medium flex justify-between w-72'>
+                      <p className='mb-2 px-4 text-gray-600 font-medium flex  w-72'>
                         {colorDesc.map((desc, descIndex) => (
-                          <span key={descIndex}>{desc}</span>
+                          <span 
+                            key={descIndex}
+                            style={{
+                              flex: 1,
+                              textAlign: descIndex === 1 ? 'right' : 'left',
+                            }}
+                          >
+                            {desc}
+                          </span>
                         ))}
                       </p>
                     ) : null}
                     <div
-                      className={clsx("flex rounded-2xl overflow-hidden shadow-xl w-72")}>
+                      className={clsx("flex rounded-2xl overflow-hidden shadow-xl w-72 border border-[#cbcbcbb5]")}>
                       {colors.map((color, i) => {
                         return (
                           <div
                             key={i}
-                            className='text-[#5e5e5e] font-medium text-balance flex-1 p-3'
+                            className='text-[#1d1d1d] font-medium text-balance flex-1 p-3'
                             style={{
                               backgroundColor: color,
                               textAlign: i === 1 ? 'right' : 'left',
@@ -349,18 +353,26 @@ export default function GradientColor() {
                 return (
                   <Card key={index} path={`/pages/gradient-color/${encodeURIComponent(colors.join(","))}`}>
                     {colorDescLen && colorDescLen > 0 ? (
-                      <p className='mb-2 px-4 text-gray-600 font-medium flex justify-between w-72'>
+                      <p className='mb-2 px-4 text-gray-600 font-medium flex  w-72'>
                         {colorDesc.map((desc, descIndex) => (
-                          <span key={descIndex}>{desc}</span>
+                          <span 
+                            key={descIndex}
+                            style={{
+                              flex: 1,
+                              textAlign: descIndex === 0 ? 'left' : ( descIndex === 1 ? 'center' : 'right'),
+                            }}
+                          >
+                            {desc}
+                          </span>
                         ))}
                       </p>
                     ) : null}
                     <div
-                      className={clsx("flex rounded-2xl overflow-hidden shadow-xl w-72")}>
+                      className={clsx("flex rounded-2xl overflow-hidden shadow-xl w-72 border border-[#cbcbcbb5]")}>
                       {colors.map((color, i) => (
                         <div 
                           key={i} 
-                          className='text-[#5e5e5e] font-medium flex-1 p-3'
+                          className='text-[#1d1d1d] font-medium flex-1 p-3'
                           style={{
                             backgroundColor: color,
                             textAlign: i === 0 ? 'left' : ( i === 1 ? 'center' : 'right'),

@@ -276,7 +276,7 @@ export default function GradientColor() {
       <PageWrapper>
         <div className='relative py-16 h-full'>
           {/* 右上角新建按钮 */}
-          <div className='absolute right-8 top-8 z-10'>
+          {/* <div className='absolute right-8 top-8 z-10'>
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <Button variant='outline'>新建颜色</Button>
@@ -333,7 +333,7 @@ export default function GradientColor() {
                 </Form>
               </DialogContent>
             </Dialog>
-          </div>
+          </div> */}
 
           <h1 className='text-5xl font-bold text-gray-900 mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600'>
             听说这些是比较好看的配色

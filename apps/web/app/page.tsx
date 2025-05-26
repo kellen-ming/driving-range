@@ -23,10 +23,10 @@ export default function PageList() {
       <div className="relative py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-5xl font-bold text-gray-900 mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
-            我的作品集
+            练习聚集地
           </h1>
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-            探索我的创意项目集合，每一个作品都代表着独特的解决方案和创新思维
+            欢迎来到这个神奇的小角落！这里就像是一个装满各种奇思妙想的百宝箱，每个项目都像是被施了魔法的玩具，等待着被探索和发现。
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project, index) => (

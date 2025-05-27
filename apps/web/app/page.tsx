@@ -14,6 +14,12 @@ const projects = [
     path: "/pages/gradient-color",
     tags: ["UI"]
   },
+  {
+    title: "Create Seal",
+    description: "制作一个简单的印章",
+    path: "/pages/seal",
+    tags: ["JS", "SVG", "Canvas"]
+  },
   // ... 这里可以添加更多项目
 ];
 

@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "driving-range",
   "private": true,
   "scripts": {
     "build": "turbo build",

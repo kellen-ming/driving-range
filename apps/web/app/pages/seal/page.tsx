@@ -144,7 +144,7 @@ export default function Seal() {
         suggestedText = suggestedText
           .replace(/['"“”‘’]/g, "")
           .replace(/\s+/g, "")
-          .substring(0, 5);
+          .substring(0, 3);
         setStampText(suggestedText); // 更新印章文字状态
         showMessage("文案建议已更新！", "success");
       } else {
@@ -225,14 +225,14 @@ export default function Seal() {
           {/* 直接编辑印章文字的输入框 */}
           <div className='w-full flex flex-col items-center gap-3'>
             <label htmlFor='stampTextInput' className='text-gray-700 font-medium text-lg'>
-              印章文字 (可编辑，最多5字):
+              印章文字 (可编辑，最多3个字):
             </label>
             <input
               type='text'
               id='stampTextInput'
               value={stampText}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setStampText(e.target.value)}
-              maxLength={5}
+              maxLength={3}
               className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-xl font-medium'
             />
           </div>
